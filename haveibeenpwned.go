@@ -3,7 +3,6 @@ package haveibeenpwned
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -60,7 +59,6 @@ func BreachedAccount(account, domainFilter string, truncate, unverified bool) ([
 	if err := json.Unmarshal(body, &breaches); err != nil {
 		return nil, err
 	}
-	fmt.Printf("%#v", breaches)
 
 	return breaches, nil
 }
@@ -86,7 +84,6 @@ func Breaches(domainFilter string) ([]BreachModel, error) {
 	if err := json.Unmarshal(body, &breaches); err != nil {
 		return nil, err
 	}
-	fmt.Printf("%#v", breaches)
 
 	return breaches, nil
 
@@ -113,7 +110,6 @@ func Breach(name string) ([]BreachModel, error) {
 	if err := json.Unmarshal(body, &breaches); err != nil {
 		return nil, err
 	}
-	fmt.Printf("%#v", breaches)
 
 	return breaches, nil
 }
@@ -138,7 +134,6 @@ func PasteAccount(email string) ([]PasteModel, error) {
 	if err := json.Unmarshal(body, &pastes); err != nil {
 		return nil, err
 	}
-	fmt.Printf("%#v", pastes)
 
 	return pastes, nil
 
