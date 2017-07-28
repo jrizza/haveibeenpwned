@@ -174,11 +174,11 @@ func callService(service, account, domainFilter string, truncate, unverified boo
 
 	switch res.StatusCode {
 	case http.StatusBadRequest:
-		return nil, errors.New("error: the account does not comply with an acceptable format")
+		return nil, errors.New("the account does not comply with an acceptable format")
 	case http.StatusForbidden:
-		return nil, errors.New("error: no user agent has been specified in the request")
+		return nil, errors.New("no user agent has been specified in the request")
 	case http.StatusTooManyRequests:
-		return nil, errors.New("error: too many requests — the rate limit has been exceeded")
+		return nil, errors.New("too many requests — the rate limit has been exceeded")
 	}
 
 	return res, nil
