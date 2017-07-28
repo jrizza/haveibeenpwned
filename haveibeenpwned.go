@@ -168,10 +168,6 @@ func callService(service, account, domainFilter string, truncate, unverified boo
 	req.Header.Set("User-Agent", "Go/1.8")
 	res, err := client.Do(req)
 
-	if err != nil {
-		return nil, err
-	}
-
 	switch res.StatusCode {
 	case http.StatusBadRequest:
 		return nil, errors.New("the account does not comply with an acceptable format")
@@ -181,5 +177,8 @@ func callService(service, account, domainFilter string, truncate, unverified boo
 		return nil, errors.New("too many requests — the rate limit has been exceeded")
 	}
 
+	if err != nil {
+		return nil, err
+	}
 	return res, nil
 }
