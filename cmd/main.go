@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
 	"os"
 
 	pwn "github.com/jrizza/haveibeenpwned"
@@ -35,7 +34,11 @@ func main() {
 	flag.Parse()
 
 	if len(os.Args) < 2 {
-		fmt.Println("account, breach, breaches or pastes subcommand is required")
+		fmt.Println("Please indicate subcommand:")
+		fmt.Println("account			Get breaches for a particular account")
+		fmt.Println("breach			Get information of a particular breach")
+		fmt.Println("breaches		Get all breaches")
+		fmt.Println("pastes 			Get all pastes for a particular account")
 		os.Exit(1)
 	}
 
@@ -48,45 +51,77 @@ func main() {
 		}
 		data, err := pwn.BreachedAccount(*accountNameFlag, *accountDomainFlag, *accountTruncateFlag, *accountUnverifiedFlag)
 		if err != nil {
-			log.Fatal(err)
-		}
-		if data == nil {
-			log.Printf("No breaches for account: " + *accountNameFlag)
-		}
-		for _, b := range data {
-			log.Printf("%s", b.Title)
-		}
-	case "breaches":
-		breachesCommand.Parse(os.Args[2:])
-		_, err := pwn.Breaches(*breachesDomainFlag)
-		if err != nil {
-			log.Fatal(err)
+			fmt.Fprintf(os.Stderr, "error: %s\n", err)
 			os.Exit(1)
 		}
+		checkBreachData(data)
+	case "breaches":
+		breachesCommand.Parse(os.Args[2:])
+		data, err := pwn.Breaches(*breachesDomainFlag)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "error: %s\n", err)
+			os.Exit(1)
+		}
+		checkBreachData(data)
 	case "breach":
 		breachCommand.Parse(os.Args[2:])
 		if *breachNameFlag == "" {
 			breachCommand.PrintDefaults()
 			os.Exit(1)
 		}
-		_, err := pwn.Breach(*breachNameFlag)
+		data, err := pwn.Breach(*breachNameFlag)
 		if err != nil {
-			log.Fatal(err)
+			fmt.Fprintf(os.Stderr, "error: %s\n", err)
 			os.Exit(1)
 		}
+		checkBreachData(data)
 	case "pastes":
 		pastesCommand.Parse(os.Args[2:])
 		if *pastesNameFlag == "" {
 			pastesCommand.PrintDefaults()
 			os.Exit(1)
 		}
-		_, err := pwn.PasteAccount(*pastesNameFlag)
+		data, err := pwn.PasteAccount(*pastesNameFlag)
 		if err != nil {
-			log.Fatal(err)
+			fmt.Fprintf(os.Stderr, "error: %s\n", err)
 			os.Exit(1)
 		}
+		checkPasteData(data)
 	default:
 		fmt.Println("account, breach, breaches or pastes subcommand is required")
 		os.Exit(1)
 	}
+	os.Exit(0)
+}
+
+func checkBreachData(data []pwn.BreachModel) {
+	if data == nil {
+		fmt.Println("Good!, no breaches found!")
+	}
+	fmt.Printf("Breaches found: %d...\n", len(data))
+	fmt.Println("----------------------------")
+
+	for _, b := range data {
+		//fmt.Printf("%v", b)
+		fmt.Printf("Name: %s\n", b.Name)
+		if b.Title != "" {
+			fmt.Printf("Title: %s\nDomain: %s\nBreach Date: %s\nAdded Date: %s\nModified Date: %s\n", b.Title, b.Domain, b.BreachDate, b.AddedDate, b.ModifiedDate)
+			fmt.Printf("Pwn Count: %d\nDescription: %s\nData Classes: %s\nIs Verified?: %v\nIs Fabricated?: %v\nIs Sensitive?: %v\nIs Retired?: %v\nIs Spam List?: %v\n", b.PwnCount, b.Description, b.DataClasses, b.IsVerified, b.IsFabricated, b.IsSensitive, b.IsRetired, b.IsSpamList)
+		}
+		fmt.Println("----------------------------")
+	}
+	os.Exit(0)
+}
+
+func checkPasteData(data []pwn.PasteModel) {
+	if data == nil {
+		fmt.Println("Good!, no pastes found!")
+	}
+	fmt.Printf("Pastes found: %d...\n", len(data))
+	fmt.Println("----------------------------")
+	for _, b := range data {
+		fmt.Printf("ID: %s\nTitle: %s\nSource: %s\nDate: %s\nEmailCount: %d\n", b.ID, b.Title, b.Source, b.Date, b.EmailCount)
+		fmt.Println("----------------------------")
+	}
+	os.Exit(0)
 }
