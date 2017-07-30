@@ -27,6 +27,7 @@ type BreachModel struct {
 	IsSensitive  bool     `json:"IsSensitive,omitempty"`
 	IsRetired    bool     `json:"IsRetired,omitempty"`
 	IsSpamList   bool     `json:"IsSpamList,omitempty"`
+	LogoType     string   `json:"LogoType,omitempty"`
 }
 
 //PasteModel model
@@ -90,28 +91,28 @@ func Breaches(domainFilter string) ([]BreachModel, error) {
 }
 
 //Breach return an specific breach by name
-func Breach(name string) ([]BreachModel, error) {
+func Breach(name string) (BreachModel, error) {
 
+	breach := new(BreachModel)
 	res, err := callService("breach", name, "", false, false)
 	if err != nil {
-		return nil, err
+		return *breach, err
 	}
 	if res.StatusCode == http.StatusNotFound {
-		return nil, nil
+		return *breach, nil
 	}
 
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		return nil, err
+		return *breach, err
 	}
 	defer res.Body.Close()
 
-	breaches := make([]BreachModel, 0)
-	if err := json.Unmarshal(body, &breaches); err != nil {
-		return nil, err
+	if err := json.Unmarshal(body, &breach); err != nil {
+		return *breach, err
 	}
 
-	return breaches, nil
+	return *breach, nil
 }
 
 //PasteAccount return an slice of Pastes for the specific account

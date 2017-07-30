@@ -54,7 +54,7 @@ func main() {
 			fmt.Fprintf(os.Stderr, "error: %s\n", err)
 			os.Exit(1)
 		}
-		checkBreachData(data)
+		checkBreachesData(data)
 	case "breaches":
 		breachesCommand.Parse(os.Args[2:])
 		data, err := pwn.Breaches(*breachesDomainFlag)
@@ -62,7 +62,7 @@ func main() {
 			fmt.Fprintf(os.Stderr, "error: %s\n", err)
 			os.Exit(1)
 		}
-		checkBreachData(data)
+		checkBreachesData(data)
 	case "breach":
 		breachCommand.Parse(os.Args[2:])
 		if *breachNameFlag == "" {
@@ -94,7 +94,7 @@ func main() {
 	os.Exit(0)
 }
 
-func checkBreachData(data []pwn.BreachModel) {
+func checkBreachesData(data []pwn.BreachModel) {
 	if data == nil {
 		fmt.Println("Good!, no breaches found!")
 	}
@@ -102,12 +102,25 @@ func checkBreachData(data []pwn.BreachModel) {
 	fmt.Println("----------------------------")
 
 	for _, b := range data {
-		//fmt.Printf("%v", b)
 		fmt.Printf("Name: %s\n", b.Name)
 		if b.Title != "" {
 			fmt.Printf("Title: %s\nDomain: %s\nBreach Date: %s\nAdded Date: %s\nModified Date: %s\n", b.Title, b.Domain, b.BreachDate, b.AddedDate, b.ModifiedDate)
 			fmt.Printf("Pwn Count: %d\nDescription: %s\nData Classes: %s\nIs Verified?: %v\nIs Fabricated?: %v\nIs Sensitive?: %v\nIs Retired?: %v\nIs Spam List?: %v\n", b.PwnCount, b.Description, b.DataClasses, b.IsVerified, b.IsFabricated, b.IsSensitive, b.IsRetired, b.IsSpamList)
 		}
+		fmt.Println("----------------------------")
+	}
+	os.Exit(0)
+}
+
+func checkBreachData(data pwn.BreachModel) {
+	if data.Name == "" {
+		fmt.Println("Good!, no breaches found!")
+	} else {
+		fmt.Println("Breach found...")
+		fmt.Println("----------------------------")
+		fmt.Printf("Title: %s\nDomain: %s\nBreach Date: %s\nAdded Date: %s\nModified Date: %s\n", data.Title, data.Domain, data.BreachDate, data.AddedDate, data.ModifiedDate)
+		fmt.Printf("Pwn Count: %d\nDescription: %s\nData Classes: %s\nIs Verified?: %v\nIs Fabricated?: %v\nIs Sensitive?: %v\nIs Retired?: %v\nIs Spam List?: %v\n", data.PwnCount, data.Description, data.DataClasses, data.IsVerified, data.IsFabricated, data.IsSensitive, data.IsRetired, data.IsSpamList)
+		fmt.Printf("Logo Type: %s\n", data.LogoType)
 		fmt.Println("----------------------------")
 	}
 	os.Exit(0)
