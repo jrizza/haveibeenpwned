@@ -1,3 +1,5 @@
+// Package haveibeenpwned provides access to the Have I been Pwned API, returning a BreachModel or a PasteModel
+// if any breach/paste is found.
 package haveibeenpwned
 
 import (
