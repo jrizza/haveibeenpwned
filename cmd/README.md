@@ -1,14 +1,10 @@
 # haveibeenpwned
 
-*A CLI for [Troy Hunt][troy]'s
-[Have I been pwned?][haveibeenpwned] API using Go
+A CLI for [Troy Hunt's Have I Been Pwned? API](https://haveibeenpwned.com/API/v2) using Go
 
 ## Usage
 
 ```
-Usage: haveibeenpwned command [options]
-
-
 SubCommands:
 
 Please indicate subcommand:
@@ -16,9 +12,11 @@ account                 Get breaches for a particular account
 breach                  Get information of a particular breach
 breaches                Get all breaches
 pastes                  Get all pastes for a particular account
+```
 
 Each command has its own -h option and each mandatory fields.
 
+```
 $ go run main.go account -h
 Usage of account:
   -domain string
