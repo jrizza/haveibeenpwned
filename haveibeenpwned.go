@@ -13,7 +13,7 @@ import (
 //API URL of haveibeenpwned.com
 const API = "https://haveibeenpwned.com/api/v2/"
 
-//BreachModel model
+//BreachModel Each breach contains a number of attributes describing the incident. In the future, these attributes may expand without the API being versioned.
 type BreachModel struct {
 	Name         string   `json:"Name,omitempty"`
 	Title        string   `json:"Title,omitempty"`
@@ -32,7 +32,7 @@ type BreachModel struct {
 	LogoType     string   `json:"LogoType,omitempty"`
 }
 
-//PasteModel model
+//PasteModel Each paste contains a number of attributes describing it. In the future, these attributes may expand without the API being versioned.
 type PasteModel struct {
 	Source     string `json:"Source,omitempty"`
 	ID         string `json:"Id,omitempty"`
@@ -66,7 +66,7 @@ func BreachedAccount(account, domainFilter string, truncate, unverified bool) ([
 	return breaches, nil
 }
 
-//Breaches return all breaches
+//Breaches Getting all breached sites in the system. A "breach" is an instance of a system having been compromised by an attacker and the data disclosed.
 func Breaches(domainFilter string) ([]BreachModel, error) {
 
 	res, err := callService("breaches", "", "", false, false)
@@ -92,7 +92,7 @@ func Breaches(domainFilter string) ([]BreachModel, error) {
 
 }
 
-//Breach return an specific breach by name
+//Breach Sometimes just a single breach is required and this can be retrieved by the breach "name". This is the stable value which may or may not be the same as the breach "title" (which can change).
 func Breach(name string) (BreachModel, error) {
 
 	breach := new(BreachModel)
@@ -117,7 +117,7 @@ func Breach(name string) (BreachModel, error) {
 	return *breach, nil
 }
 
-//PasteAccount return an slice of Pastes for the specific account
+//PasteAccount The API takes a single parameter which is the email address to be searched for. Unlike searching for breaches, usernames that are not email addresses cannot be searched for. The email is not case sensitive and will be trimmed of leading or trailing white spaces. The email should always be URL encoded.
 func PasteAccount(email string) ([]PasteModel, error) {
 	res, err := callService("pasteaccount", email, "", false, false)
 	if err != nil {
@@ -174,8 +174,6 @@ func callService(service, account, domainFilter string, truncate, unverified boo
 	switch res.StatusCode {
 	case http.StatusBadRequest:
 		return nil, errors.New("the account does not comply with an acceptable format")
-	case http.StatusForbidden:
-		return nil, errors.New("no user agent has been specified in the request")
 	case http.StatusTooManyRequests:
 		return nil, errors.New("too many requests — the rate limit has been exceeded")
 	}

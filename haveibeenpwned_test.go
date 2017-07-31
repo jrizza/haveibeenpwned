@@ -1,7 +1,10 @@
 package haveibeenpwned
 
-import "testing"
-import "time"
+import (
+	"errors"
+	"testing"
+	"time"
+)
 
 const APIrateLimit = 1500
 
@@ -110,5 +113,21 @@ func TestInvalidPasteAccount(t *testing.T) {
 	}
 	if pastes != nil {
 		t.Errorf("expected no results, got %d", len(pastes))
+	}
+	if err.Error() != errors.New("the account does not comply with an acceptable format").Error() {
+		t.Errorf("expected: the account does not comply with an acceptable format, got: %s", err)
+	}
+}
+
+func TestManyRequests(t *testing.T) {
+	time.Sleep(APIrateLimit * time.Millisecond)
+	_, err := PasteAccount("test")
+	_, err = PasteAccount("test")
+	_, err = PasteAccount("test")
+	if err == nil {
+		t.Fatal("expected error, got nil")
+	}
+	if err.Error() != errors.New("too many requests — the rate limit has been exceeded").Error() {
+		t.Errorf("expected: too many requests — the rate limit has been exceeded, got %s", err)
 	}
 }
