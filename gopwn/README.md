@@ -2,11 +2,18 @@
 
 A CLI for [Troy Hunt's Have I Been Pwned? API](https://haveibeenpwned.com/API/v2) using Go
 
+## Instalation
+
+```
+$ git clone https://github.com/jrizza/haveibeenpwned
+$ cd haveibeenpwned/gopwn
+$ go build
+```
+
 ## Usage
 
 ```
-SubCommands:
-
+$ ./gopwn
 Please indicate subcommand:
 account                 Get breaches for a particular account
 breach                  Get information of a particular breach
@@ -17,7 +24,7 @@ pastes                  Get all pastes for a particular account
 Each command has its own -h option and each mandatory fields.
 
 ```
-$ go run main.go account -h
+$ ./gopwn account -h
 Usage of account:
   -domain string
         Filters the result set to only breaches against the domain specified
@@ -28,17 +35,17 @@ Usage of account:
   -unverified
         Returns breaches that have been flagged as unverified
 
-$ go run main.go breach -h
+$ ./gopwn breach -h
 Usage of breach:
   -name string
         Breach name (required)
 
-$ go run main.go breaches -h
+$ ./gopwn breaches -h
 Usage of breaches:
   -domain string
         Filters the result set to only breaches against the domain specified
 
-$ go run main.go pastes -h
+$ ./gopwn pastes -h
 Usage of pastes:
   -email string
         Email to be searched (required)
@@ -46,4 +53,4 @@ Usage of pastes:
 
 ## License
 
-This tool is distributed under the [MIT License](LICENSE.txt).
+This tool is distributed under the [MIT License](LICENSE).

@@ -67,3 +67,7 @@ Breach Sometimes just a single breach is required and this can be retrieved by t
 func PasteAccount(email string) ([]PasteModel, error)
 ```
 PasteAccount The API takes a single parameter which is the email address to be searched for. Unlike searching for breaches, usernames that are not email addresses cannot be searched for. The email is not case sensitive and will be trimmed of leading or trailing white spaces. The email should always be URL encoded.
+
+## License
+
+This tool is distributed under the [MIT License](LICENSE).
