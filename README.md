@@ -2,7 +2,7 @@
 
 ## Overview
 
-Package haveibeenpwned provides access to the (Have I been Pwned?)[https://haveibeenpwned.com/] API, returning a BreachModel or a PasteModel if any breach/paste is found.
+Package haveibeenpwned provides access to the [Have I been Pwned?](https://haveibeenpwned.com/) API, returning a BreachModel or a PasteModel if any breach/paste is found.
 
 ## Types
 
